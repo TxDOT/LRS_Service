@@ -16,6 +16,12 @@
     z-index: 1;
 }
 
+/* CLICKABLE ICONS WITHOUT BUTTONS  */
+
+.fa {
+    cursor: pointer;
+}
+
 /* CUSTOMIZE PLACEHOLDER TEXT */
 
 ::-webkit-input-placeholder {
