@@ -1,0 +1,59 @@
+/* CENTER INPUT AND OUTPUT DIVS */
+
+#cover {
+    background-color: #143c5c;
+    background-size: cover;
+    height: 100%;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+#cover-caption {
+    width: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+/* ALIGNING INFO BUTTON TO TEXT */
+/* #infoBtn {
+    margin-bottom: 8px;
+} */
+
+/* CUSTOMIZE PLACEHOLDER TEXT */
+
+::-webkit-input-placeholder {
+   font-style: italic;
+}
+:-moz-placeholder {
+   font-style: italic;
+}
+::-moz-placeholder {
+   font-style: italic;
+}
+:-ms-input-placeholder {
+   font-style: italic;
+}
+
+/* CUSTOMIZE BUTTON COLOR */
+
+.btn-warning {
+    color: white !important;
+    background-color: #cc7b29 !important;
+    border-color: #cc7b29 !important;
+}
+
+.btn-warning:hover {
+    color: white !important;
+    background-color: rgba(204, 123, 41, 0.85) !important;
+}
+
+.btn-warning.focus, .btn-warning:focus {
+    box-shadow: none;
+}
+
+.btn-warning:not(:disabled):not(.disabled):active {
+    color: white;
+    box-shadow: none;
+}
