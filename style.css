@@ -22,6 +22,11 @@
     cursor: pointer;
 }
 
+.fa:hover {
+    cursor: pointer;
+    color: #cc7b29;
+}
+
 /* CUSTOMIZE PLACEHOLDER TEXT */
 
 ::-webkit-input-placeholder {
