@@ -4,11 +4,14 @@
         <!-- Required meta tags -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
         <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+            integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+            crossorigin="anonymous">
         <!-- FontAwesome CSS CDN  -->
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz"crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"
+            integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz"
+            crossorigin="anonymous">
         <!-- Custom CSS -->
         <link rel="stylesheet" href="./style.css">
         <title>LRS Service API</title>
@@ -20,22 +23,27 @@
                     <div class="row text-white">
                         <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto text-center form p-4">
                             <h3 class="display-4 py-2 text-truncate">LRS API
-                                    <span id="infoBtn"><i class="fa fa-info-circle" style="font-size:24px"></i></span>
+                                <span type="button" id="infoBtn" data-toggle="modal" data-target='#aboutMod'>
+                                    <i class="fa fa-info-circle" style="font-size:24px"></i>
+                                </span>
                             </h3>
                             <div class="px-2">
                                 <form action="" class="justify-content-center">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" placeholder="x-coordinate">
+                                        <input type="text" class="form-control" id="xCoord" placeholder="x-coordinate">
                                     </div>
                                     <div class="form-group">
-                                        <input type="text" class="form-control" placeholder="y-coordinate">
+                                        <input type="text" class="form-control" id="yCoord" placeholder="y-coordinate">
                                     </div>
                                     <div class="form-group">
-                                        <input type="text" class="form-control" placeholder="buffer distance (meters)">
+                                        <input type="text" class="form-control" id="bufferDist" placeholder="buffer distance (meters)">
                                     </div>
                                 </form>
                                 <br>
                                 <button class="btn btn-warning btn-lg" id="runQueryBtn">Run Query</button>
+                                <br>
+                                <br>
+                                <button class="btn btn-secondary btn-lg" type="reset" id="resetBtn">Reset</button>
                                 <br>
                                 <br>
                                 <button class="btn btn-primary btn-lg" id="getLocBtn">Use Location</button>
@@ -52,10 +60,87 @@
                 </div>
             </div>
         </section>
+        <!-- About Modal -->
+        <div class="modal fade" id="aboutMod" tabindex="-1" role="dialog" aria-labelledby="aboutModLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-center">
+                        <h3 class="modal-title w-100" id="aboutModLabel">About the LRS API</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <h4>How to Use the API</h4>
+                        <ul>
+                            <li><strong>Feature</strong>
+                                <p>Description of feature</p>
+                            </li>
+                            <li><strong>Feature</strong>
+                                <p>Description of feature</p>
+                            </li>
+                            <li><strong>Feature</strong>
+                                <p>Description of feature</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- jQuery CDN - Slim version (without AJAX) -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous">
+        </script>
+        <!-- Popper.JS CDN-->
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous">
+        </script>
+        <!-- Bootstrap JS -->
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+            integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+            crossorigin="anonymous">
+        </script>
+        <!-- ArcGIS JS 4 CDN -->
+        <script src="https://js.arcgis.com/4.15/"></script>
+        <!-- LRS API (This will be hosted on a CDN as the 'Service')-->
+        <script src="./lrs_api.js"></script>
+        <script>
+            $(document).ready(function() {
+                $('#runQueryBtn').click(function() {
+                    let theX = $('#xCoord').val();
+                    let theY = $('#yCoord').val();
+                    let theBuffer = $('#bufferDist').val();
+                    $(this).blur();
+                    console.log(theX+", "+theY+" :"+theBuffer);
+                    // Call the API here
+                });
+                $('#resetBtn').click(function() {
+                    $('#xCoord, #yCoord, #bufferDist').val('');
+                    $(this).blur();
+                });
+                $('#getLocBtn').click(function() {
+                    // Get users's Location
+                    // Parse lat/long and populate values in form
+                    if (navigator.geolocation) {
+                        let location = navigator.geolocation.getCurrentPosition(function(position){
+                            $('#xCoord').val(position.coords.longitude);
+                            $('#yCoord').val(position.coords.latitude);
+                            $('#bufferDist').val('10');
+                        });
+                    }
+                    else {
+                        alert("Geolocation not supported by this browser");
+                    }
+                    // Call API here Ex: calculate
+                    $(this).blur();
+                });
 
-        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+            });
+        </script>
     </body>
 </html>

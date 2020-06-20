@@ -55,9 +55,9 @@
     background-color: rgba(204, 123, 41, 0.85) !important;
 }
 
-.btn-warning.focus, .btn-warning:focus {
+/* .btn-warning.focus, .btn-warning:focus {
     box-shadow: none;
-}
+} */
 
 .btn-warning:not(:disabled):not(.disabled):active {
     color: white;
