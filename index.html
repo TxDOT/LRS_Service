@@ -132,7 +132,9 @@
         <script src="./lrs_api.js"></script>
         <script>
             $(document).ready(function() {
-                // $('[data-toggle="tooltip"]').tooltip();
+                if ($(window).width() > 780) {
+                    $('[data-toggle="tooltip"]').tooltip();
+                }
                 $('#getLocBtn').click(function() {
                     // Get users's Location
                     // Parse lat/long and populate values in form
