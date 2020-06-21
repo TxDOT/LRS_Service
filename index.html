@@ -47,7 +47,7 @@
                                         </button>
                                     </div>
                                     <div class="col-md-6">
-                                        <button class="btn form-control btn-warning btn-lg mb-3 mr-3" id="runQueryBtn" data-toggle="tooltip" title="Calculate Measure">
+                                        <button class="btn form-control btn-warning btn-lg mb-3 mr-3" id="runQueryBtn" data-toggle="tooltip" title="Get Measures">
                                             <i class="fa fa-search-plus" style="font-size:24px"></i>
                                         </button>
                                     </div>
@@ -70,11 +70,11 @@
                     <div class="row text-white">
                         <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto text-center form p-2">
                             <div class="btn btn-warning btn-block btn-lg" id="outputToggleBtn" data-toggle="collapse" data-target="#formCollapse">
-                                Hide Output
+                                Hide Results
                             </div>
                             <br>
                             <div class="form-group collapse show" id="formCollapse">
-                                <textarea class="form-control" id="outputResponse" rows="12" placeholder="Output"></textarea>
+                                <textarea class="form-control" id="outputResponse" rows="12" placeholder="Results"></textarea>
                             </div>
                         </div>
                     </div>
@@ -132,12 +132,15 @@
         <script src="./lrs_api.js"></script>
         <script>
             $(document).ready(function() {
-                if ($(window).width() > 780) {
+                // Only enable tooltips if user not on mobile
+                function isTouchDevice() {
+                    return true == ("ontouchstart" in window || window.DocumentTouch && document instanceof DocumentTouch);
+                }
+                if (isTouchDevice()===false) {
                     $('[data-toggle="tooltip"]').tooltip();
                 }
+                // Button controls
                 $('#getLocBtn').click(function() {
-                    // Get users's Location
-                    // Parse lat/long and populate values in form
                     if (navigator.geolocation) {
                         let location = navigator.geolocation.getCurrentPosition(function(position){
                             $('#xCoord').val(position.coords.longitude);
@@ -175,20 +178,14 @@
                 });
                 $('#outputToggleBtn').click(function() {
                     let text = $(this).html();
-                    if (text == "Show Output") {
-                        $(this).html("Hide Output");
+                    if (text == "Show Results") {
+                        $(this).html("Hide Results");
                     }
                     else {
-                        $(this).html("Show Output");
+                        $(this).html("Show Results");
                     }
 
                 });
-                // $('#formCollapse').on('hidden.bs.collapse',function() {
-                //     $('#outputToggleBtn').html("View Output");
-                // });
-                // $('#formCollapse').on('shown.bs.collapse', function() {
-                //     $('outputToggleBtn').html("Hide Output");
-                // });
             });
         </script>
     </body>
