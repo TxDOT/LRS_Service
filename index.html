@@ -21,7 +21,7 @@
             <div id="cover-caption">
                 <div class="container">
                     <div class="row text-white">
-                        <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto text-center form p-4">
+                        <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto text-center form p-2">
                             <h3 class="display-4 py-2 text-truncate">LRS API
                                 <span id="infoBtn" data-toggle="modal" data-target='#aboutMod'>
                                     <i class="fa fa-info-circle" style="font-size:24px"></i>
@@ -40,20 +40,41 @@
                                     </div>
                                 </form>
                                 <br>
-                                <button class="btn btn-warning btn-lg" id="runQueryBtn">Run Query</button>
-                                <br>
-                                <br>
-                                <button class="btn btn-secondary btn-lg" type="reset" id="resetBtn">Reset</button>
-                                <br>
-                                <br>
-                                <button class="btn btn-primary btn-lg" id="getLocBtn">Use Location</button>
+                                <div class="form-group row">
+                                    <div class="col-md-6">
+                                        <button class="btn form-control btn-primary btn-lg mb-3 mr-3" id="getLocBtn" data-toggle="tooltip" title="Use Current Location">
+                                            <i class="fas fa-crosshairs" style="font-size:24px"></i>
+                                        </button>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button class="btn form-control btn-warning btn-lg mb-3 mr-3" id="runQueryBtn" data-toggle="tooltip" title="Calculate Measure">
+                                            <i class="fa fa-search-plus" style="font-size:24px"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-6">
+                                        <button class="btn form-control btn-secondary btn-lg mb-3 mr-3" id="resetBtn" data-toggle="tooltip" title="Reset Parameters">
+                                            <i class="fa fa-times" style="font-size:24px"></i>
+                                        </button>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button class="btn form-control btn-secondary btn-lg mb-3 mr-3" id="exportBtn" data-toggle="tooltip" title="Export Results">
+                                            <i class="fas fa-file-export" style="font-size:24px"></i>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="row text-white">
-                        <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto text-center form p-4">
-                            <div class="form-group">
-                                <textarea class="form-control" id="outputResponse" rows="8" placeholder="Output"></textarea>
+                        <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto text-center form p-2">
+                            <div class="btn btn-warning btn-block btn-lg" id="outputToggleBtn" data-toggle="collapse" data-target="#formCollapse">
+                                Hide Output
+                            </div>
+                            <br>
+                            <div class="form-group collapse show" id="formCollapse">
+                                <textarea class="form-control" id="outputResponse" rows="12" placeholder="Output"></textarea>
                             </div>
                         </div>
                     </div>
@@ -111,18 +132,7 @@
         <script src="./lrs_api.js"></script>
         <script>
             $(document).ready(function() {
-                $('#runQueryBtn').click(function() {
-                    let theX = $('#xCoord').val();
-                    let theY = $('#yCoord').val();
-                    let theBuffer = $('#bufferDist').val();
-                    $(this).blur();
-                    console.log(theX+", "+theY+" :"+theBuffer);
-                    // Call the API here
-                });
-                $('#resetBtn').click(function() {
-                    $('#xCoord, #yCoord, #bufferDist').val('');
-                    $(this).blur();
-                });
+                $('[data-toggle="tooltip"]').tooltip();
                 $('#getLocBtn').click(function() {
                     // Get users's Location
                     // Parse lat/long and populate values in form
@@ -136,10 +146,47 @@
                     else {
                         alert("Geolocation not supported by this browser");
                     }
-                    // Call API here Ex: calculate
+                    // Call the API here
                     $(this).blur();
                 });
+                $('#runQueryBtn').click(function() {
+                    let theX = $('#xCoord').val();
+                    let theY = $('#yCoord').val();
+                    let theBuffer = $('#bufferDist').val();
+                    $(this).blur();
+                    console.log(theX+", "+theY+" :"+theBuffer);
+                    // Call the API here
+                });
+                $('#resetBtn').click(function() {
+                    $('#xCoord, #yCoord, #bufferDist, #outputResponse').val('');
+                    $(this).blur();
+                });
+                $('#exportBtn').click(function() {
+                    if (typeof(Storage) !== "undefined") {
+                        let theOutput = $('#outputResponse').val();
+                        sessionStorage.setItem(Date.now(), theOutput);
+                    }
+                    else {
+                        alert("Browser does not support web storage");
+                    }
+                    $(this).blur();
+                });
+                $('#outputToggleBtn').click(function() {
+                    let text = $(this).html();
+                    if (text == "Show Output") {
+                        $(this).html("Hide Output");
+                    }
+                    else {
+                        $(this).html("Show Output");
+                    }
 
+                });
+                // $('#formCollapse').on('hidden.bs.collapse',function() {
+                //     $('#outputToggleBtn').html("View Output");
+                // });
+                // $('#formCollapse').on('shown.bs.collapse', function() {
+                //     $('outputToggleBtn').html("Hide Output");
+                // });
             });
         </script>
     </body>

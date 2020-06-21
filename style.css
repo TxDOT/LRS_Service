@@ -18,11 +18,11 @@
 
 /* CLICKABLE ICONS WITHOUT BUTTONS  */
 
-.fa {
+.fa-info-circle {
     cursor: pointer;
 }
 
-.fa:hover {
+.fa-info-circle:hover {
     cursor: pointer;
     color: #cc7b29;
 }
@@ -55,11 +55,17 @@
     background-color: rgba(204, 123, 41, 0.85) !important;
 }
 
-/* .btn-warning.focus, .btn-warning:focus {
-    box-shadow: none;
-} */
-
 .btn-warning:not(:disabled):not(.disabled):active {
     color: white;
     box-shadow: none;
 }
+
+/* CUSTOMIZE CARD HEADER */
+
+/* .card-header {
+    padding: .75rem 1.25rem;
+    font-size: 1.25rem;
+    margin-bottom: 0;
+    background-color: #cc7b29 !important;
+    border-bottom: none !important;
+} */
