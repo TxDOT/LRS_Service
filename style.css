@@ -60,12 +60,8 @@
     box-shadow: none;
 }
 
-/* CUSTOMIZE CARD HEADER */
+/* CUSTOMIZE BUTTON WIDTH */
 
-/* .card-header {
-    padding: .75rem 1.25rem;
-    font-size: 1.25rem;
-    margin-bottom: 0;
-    background-color: #cc7b29 !important;
-    border-bottom: none !important;
-} */
+.custom-wd {
+    width: 70px !important;
+}
