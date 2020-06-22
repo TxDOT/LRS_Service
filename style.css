@@ -1,16 +1,7 @@
 /* CENTER INPUT AND OUTPUT DIVS */
 
-#cover {
-    background-color: #143c5c;
-    background-size: cover;
-    height: 100%;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    position: relative;
-}
-
 #cover-caption {
+    background-color: #143c5c;
     width: 100%;
     position: relative;
     z-index: 1;
