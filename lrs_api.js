@@ -1,14 +1,30 @@
+// GLOBAL FUNCTIONS
+
+//Check if using IE and get version
+function isIE() {
+    var ua = window.navigator.userAgent;
+    return /MSIE|Trident/.test(ua);
+}
+
+// GLOBAL VARIABLES
+let featurePartIndex;
+let firstIntersectingPoint;
+let lrs={};
+
+// ESRI JS API MODULES
 require([
     // esri config, core, and tasks
     "esri/config",
     "esri/tasks/support/Query",
     "esri/tasks/QueryTask",
+
     // geometry
     "esri/geometry/Extent",
     "esri/geometry/geometryEngineAsync",
     "esri/geometry/SpatialReference",
     "esri/geometry/Point",
     "esri/geometry/Polyline",
+
     // dojo
     "dojo/dom",
     "dojo/on",
@@ -30,7 +46,29 @@ require([
     {
         // DEFINE ALL FUNCTIONS FIRST
 
-        //
+        // Query nearby routes using xy input with buffer
+        function identRouteForM(xyPoint) {
 
+        }
+
+        // Callback function from queryTask in identRouteForM
+        function getSegmentWithDFOs(results) {
+
+        }
+
+        // Takes results from REST endpoint call and gets measure for point
+        function getPointM(results) {
+
+        }
+
+        // Gets nearest point on route based on xy ("snaps" to route)
+        function findNearestCoordinate(xyPoint) {
+
+        }
+
+        // Create line to test for ascending or descending measures
+        function createTwoPointPolyline(point1, point2) {
+
+        }
     }
 );
