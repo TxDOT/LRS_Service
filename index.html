@@ -132,6 +132,7 @@
                         let location = navigator.geolocation.getCurrentPosition(function(position){
                             $('#xCoord').val(position.coords.longitude);
                             $('#yCoord').val(position.coords.latitude);
+                            alert(position.coords.accuracy);
                             $('#bufferDist').val('10');
                         });
                     }
@@ -146,7 +147,7 @@
                     let theBuffer = $('#bufferDist').val();
                     $(this).blur();
                     // Call the API here
-                    let output = getParams(theX,theY,theBuffer);
+                    let output = getParams(theX,theY,theBuffer,theAccuracy);
                     $('#outputResponse').val(JSON.stringify(output,null,2));
 
                 });

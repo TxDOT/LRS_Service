@@ -51,11 +51,12 @@ require([
         window.findNearestCoordinate = findNearestCoordinate;
         window.createTwoPointPolyline = findNearestCoordinate;
 
-        function getParams(x,y,buff){
+        function getParams(x,y,buff,acc){
             let msg = {
                 "latitude": y,
                 "longitude": x,
-                "buffer distance": buff
+                "buffer distance": buff,
+                "accuracy": acc
             };
             // Return for debugging, will convert to geometry and call identRouteForM
             return msg;
