@@ -1,5 +1,4 @@
 // GLOBAL FUNCTIONS
-
 //Check if using IE and get version
 function isIE() {
     var ua = window.navigator.userAgent;
@@ -45,20 +44,29 @@ require([
         parser)
     {
         // DEFINE ALL FUNCTIONS FIRST
-        function doSomething(msg){
+        // Adding all functions as methods on global window object so they are accessible
+        window.getParams = getParams;
+        window.identRouteForM = identRouteForM;
+        window.getPointM = getPointM;
+        window.findNearestCoordinate = findNearestCoordinate;
+        window.createTwoPointPolyline = findNearestCoordinate;
+
+        function getParams(x,y,buff){
+            let msg = {
+                "latitude": y,
+                "longitude": x,
+                "buffer distance": buff
+            };
+            // Return for debugging, will convert to geometry and call identRouteForM
             return msg;
         }
-        window.doSomething = doSomething;
+
         // Query nearby routes using xy input with buffer
         function identRouteForM(xyPoint) {
 
         }
 
         // Callback function from queryTask in identRouteForM
-        function getSegmentWithDFOs(results) {
-
-        }
-
         // Takes results from REST endpoint call and gets measure for point
         function getPointM(results) {
 

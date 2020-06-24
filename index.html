@@ -21,7 +21,7 @@
             <div class="container">
                 <div class="row text-white">
                     <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto text-center form p-2">
-                        <h3 class="display-4 py-2 text-truncate">LRS APi
+                        <h3 class="display-4 py-2 text-truncate">LRS API
                             <span id="infoBtn" data-toggle="modal" data-target='#aboutMod'>
                                 <i class="fa fa-info-circle" style="font-size:24px"></i>
                             </span>
@@ -138,7 +138,6 @@
                     else {
                         alert("Geolocation not supported by this browser");
                     }
-                    // Call the API here
                     $(this).blur();
                 });
                 $('#runQueryBtn').click(function() {
@@ -146,10 +145,9 @@
                     let theY = $('#yCoord').val();
                     let theBuffer = $('#bufferDist').val();
                     $(this).blur();
-                    // console.log(theX+", "+theY+" :"+theBuffer);
                     // Call the API here
-                    let msg = doSomething(theX);
-                    $('#outputResponse').val(msg);
+                    let output = getParams(theX,theY,theBuffer);
+                    $('#outputResponse').val(JSON.stringify(output,null,2));
 
                 });
                 $('#resetBtn').click(function() {
