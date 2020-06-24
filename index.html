@@ -21,7 +21,7 @@
             <div class="container">
                 <div class="row text-white">
                     <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto text-center form p-2">
-                        <h3 class="display-4 py-2 text-truncate">LRS API
+                        <h3 class="display-4 py-2 text-truncate">LRS APi
                             <span id="infoBtn" data-toggle="modal" data-target='#aboutMod'>
                                 <i class="fa fa-info-circle" style="font-size:24px"></i>
                             </span>
@@ -148,7 +148,8 @@
                     $(this).blur();
                     // console.log(theX+", "+theY+" :"+theBuffer);
                     // Call the API here
-                    doSomething(theX);
+                    let msg = doSomething(theX);
+                    $('#outputResponse').val(msg);
 
                 });
                 $('#resetBtn').click(function() {

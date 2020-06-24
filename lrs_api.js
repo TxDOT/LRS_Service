@@ -46,7 +46,7 @@ require([
     {
         // DEFINE ALL FUNCTIONS FIRST
         function doSomething(msg){
-            alert(msg);
+            return msg;
         }
         window.doSomething = doSomething;
         // Query nearby routes using xy input with buffer
