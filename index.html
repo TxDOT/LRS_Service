@@ -146,7 +146,7 @@
                     let theBuffer = $('#bufferDist').val();
                     $(this).blur();
                     // Call the API here
-                    let output = getParams(theX,theY,theBuffer,theAccuracy);
+                    let output = getParams(theX,theY,theBuffer);
                     $('#outputResponse').val(JSON.stringify(output,null,2));
 
                 });
