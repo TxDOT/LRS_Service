@@ -132,7 +132,6 @@
                         let location = navigator.geolocation.getCurrentPosition(function(position){
                             $('#xCoord').val(position.coords.longitude);
                             $('#yCoord').val(position.coords.latitude);
-                            alert(position.coords.accuracy);
                             $('#bufferDist').val('10');
                         });
                     }
