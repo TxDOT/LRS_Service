@@ -146,8 +146,10 @@
                     let theY = $('#yCoord').val();
                     let theBuffer = $('#bufferDist').val();
                     $(this).blur();
-                    console.log(theX+", "+theY+" :"+theBuffer);
+                    // console.log(theX+", "+theY+" :"+theBuffer);
                     // Call the API here
+                    doSomething(theX);
+
                 });
                 $('#resetBtn').click(function() {
                     $('#xCoord, #yCoord, #bufferDist, #outputResponse').val('');

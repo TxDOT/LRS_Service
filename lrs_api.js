@@ -20,7 +20,7 @@ require([
 
     // geometry
     "esri/geometry/Extent",
-    "esri/geometry/geometryEngineAsync",
+    "esri/geometry/geometryEngine",
     "esri/geometry/SpatialReference",
     "esri/geometry/Point",
     "esri/geometry/Polyline",
@@ -36,7 +36,7 @@ require([
         Query,
         QueryTask,
         Extent,
-        geometryEngineAsync,
+        geometryEngine,
         SpatialReference,
         Point,
         Polyline,
@@ -45,7 +45,10 @@ require([
         parser)
     {
         // DEFINE ALL FUNCTIONS FIRST
-
+        function doSomething(msg){
+            alert(msg);
+        }
+        window.doSomething = doSomething;
         // Query nearby routes using xy input with buffer
         function identRouteForM(xyPoint) {
 
