@@ -119,7 +119,7 @@ require([
         // Callback function from queryTask in identRouteForM
         // Takes results from REST endpoint call and gets measure for point
         function getPointM(point,gidWithM) {
-            console.log(gidWithM);
+            alert(JSON.stringify(gidWithM.features[0].attributes,null,2));
         }
 
         // Gets nearest point on route based on xy ("snaps" to route)
