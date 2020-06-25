@@ -1,14 +1,19 @@
 // GLOBAL FUNCTIONS
+let lrsAPI = {
+    featurePartIndex:"",
+    firstIntersectingPoint:"",
+    lrs: {}
+};
+// GLOBAL VARIABLES
+// let featurePartIndex;
+// let firstIntersectingPoint;
+// let lrs={};
+
 //Check if using IE and get version
 function isIE() {
     var ua = window.navigator.userAgent;
     return /MSIE|Trident/.test(ua);
 }
-
-// GLOBAL VARIABLES
-let featurePartIndex;
-let firstIntersectingPoint;
-let lrs={};
 
 // ESRI JS API MODULES
 require([
@@ -44,19 +49,19 @@ require([
         parser)
     {
         // DEFINE ALL FUNCTIONS FIRST
-        // Adding all functions as methods on global window object so they are accessible
-        window.getParams = getParams;
-        window.identRouteForM = identRouteForM;
-        window.getPointM = getPointM;
-        window.findNearestCoordinate = findNearestCoordinate;
-        window.createTwoPointPolyline = findNearestCoordinate;
+        // Adding all functions as methods on global API object so they are accessible
+        lrsAPI.getParams = getParams;
+        lrsAPI.identRouteForM = identRouteForM;
+        lrsAPI.getPointM = getPointM;
+        lrsAPI.findNearestCoordinate = findNearestCoordinate;
+        lrsAPI.createTwoPointPolyline = findNearestCoordinate;
 
         function getParams(x,y,buff,acc){
             let msg = {
-                "latitude": y,
-                "longitude": x,
-                "buffer distance": buff,
-                "accuracy": acc
+                latitude: y,
+                longitude: x,
+                buffer: buff,
+                accuracy: acc
             };
             // Return for debugging, will convert to geometry and call identRouteForM
             return msg;

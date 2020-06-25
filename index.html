@@ -129,11 +129,20 @@
                 // Button controls
                 $('#getLocBtn').click(function() {
                     if (navigator.geolocation) {
-                        let location = navigator.geolocation.getCurrentPosition(function(position){
+                        let options = {
+                            enableHighAccuracy: true,
+                            timeout: 5000,
+                            maximumAge: 0
+                        };
+                        function success(position) {
                             $('#xCoord').val(position.coords.longitude);
                             $('#yCoord').val(position.coords.latitude);
-                            $('#bufferDist').val('10');
-                        });
+                            $('#bufferDist').val(position.coords.accuracy);
+                        }
+                        function error(err) {
+                            console.warn(`ERROR(${err.code}): ${err.message}`);
+                        }
+                        navigator.geolocation.getCurrentPosition(success, error, options);
                     }
                     else {
                         alert("Geolocation not supported by this browser");
@@ -146,8 +155,9 @@
                     let theBuffer = $('#bufferDist').val();
                     $(this).blur();
                     // Call the API here
-                    let output = getParams(theX,theY,theBuffer);
+                    let output = lrsAPI.getParams(theX,theY,theBuffer);
                     $('#outputResponse').val(JSON.stringify(output,null,2));
+                    console.log(lrsAPI);
 
                 });
                 $('#resetBtn').click(function() {
