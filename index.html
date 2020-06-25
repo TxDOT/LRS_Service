@@ -137,7 +137,7 @@
                         function success(position) {
                             $('#xCoord').val(position.coords.longitude);
                             $('#yCoord').val(position.coords.latitude);
-                            $('#bufferDist').val(position.coords.accuracy);
+                            $('#bufferDist').val(position.coords.accuracy/2);
                         }
                         function error(err) {
                             console.warn(`ERROR(${err.code}): ${err.message}`);
