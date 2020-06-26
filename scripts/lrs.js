@@ -58,35 +58,15 @@ require([
         lrsAPI.findNearestCoordinate = findNearestCoordinate;
         lrsAPI.createTwoPointPolyline = findNearestCoordinate;
 
-        function getParams(x,y,buff,acc){
-            let msg = {
-                latitude: y,
-                longitude: x,
-                buffer: buff,
-                accuracy: acc
-            };
-            // let point = new Point({
-            //     type: "point",
-            //     latitude: 29.68013,
-            //     longitude: -98.4536
-            // });
+        function getParams(x,y,buff,acc) {
+            // get xy, construct webMerc point
             let point = new Point({
                 type: "point",
                 latitude: y,
-                longitude: x
+                longitude: x,
+                spatialReference: new SpatialReference({wkid: 102100})
             });
-
-            // Project from WGS84 to WebMercator
-            projection.load().then(function() {
-                let outSR = new SpatialReference({
-                    wkid: 102100
-                });
-
-                let webmercPoint = projection.project(point, outSR);
-                identRouteForM(webmercPoint,buff);
-            });
-            // Return for debugging, will convert to geometry and call identRouteForM
-            return msg;
+            return point;
         }
 
         // Query nearby routes using reprojected point with buffer
@@ -94,14 +74,13 @@ require([
             lrsAPI.lrs = {};
             let queryTask, query, padding, gidWithMeasuresGeom, ctrlSectQuery, roadwaysQuery;
             queryTask = new QueryTask();
-            query = query = new Query({
+            query = new Query({
                 returnGeometry: true,
                 returnM: true,
                 outFields: ["*"],
             });
             // need to convert to number and make sure not zero
             padding = Number(buff)/2;
-            console.log(padding);
             query.geometry= new Extent({
                 "xmin": point.x-padding,
                 "ymin": point.y-padding,
@@ -109,26 +88,30 @@ require([
                 "ymax": point.y+padding,
                 "spatialReference": point.spatialReference
             });
-            console.log(query.geometry);
             queryTask.url = "https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Control_Sections/FeatureServer/0";
-            console.log(query.geometry);
+            // lrsAPI.lrs.mpt = queryTask.execute(query).then(function(results){
+            //      return results.features;
+            // });
             queryTask.execute(query).then(function(results){
-                lrsAPI.lrs.mpt = getPointM(point,results);
+                 lrsAPI.lrs.mpt = results.features;
             });
 
             queryTask.url = "https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Roadways/FeatureServer/0";
+            // lrsAPI.lrs.dfo = queryTask.execute(query).then(function(results){
+            //     return results.features;
+            // });
             queryTask.execute(query).then(function(results){
-                console.log(query.geometry);
-                lrsAPI.lrs.dfo = getPointM(point,results);
+                 lrsAPI.lrs.dfo = results.features;
             });
-
+            console.log(lrsAPI.lrs);
+            return lrsAPI.lrs;
         }
 
         // Callback function from queryTask in identRouteForM
         // Takes results from REST endpoint call and gets measure for point
         function getPointM(point,gidWithM) {
-            console.log(lrsAPI.lrs);
-            alert(JSON.stringify(gidWithM.features[0].attributes,null,2));
+            // let rt = JSON.stringify(gidWithM.features[0].attributes,null,2);
+            // return rt;
 
         }
 

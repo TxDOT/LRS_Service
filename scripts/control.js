@@ -35,9 +35,10 @@ $(document).ready(function() {
         let theBuffer = $('#bufferDist').val();
         $(this).blur();
         // Call the API here
-        let output = lrsAPI.getParams(theX,theY,theBuffer);
-        $('#outputResponse').val(JSON.stringify(output,null,2));
-        console.log(lrsAPI);
+        let thePt = lrsAPI.getParams(theX,theY,theBuffer);
+        // $('#outputResponse').val(JSON.stringify(output,null,2));
+        let routeInfo = lrsAPI.identRouteForM(thePt,theBuffer);
+        $('#outputResponse').val(JSON.stringify(routeInfo,null,2));
 
     });
     $('#resetBtn').click(function() {
