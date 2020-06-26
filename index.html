@@ -13,7 +13,7 @@
             integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz"
             crossorigin="anonymous">
         <!-- Custom CSS -->
-        <link rel="stylesheet" href="./style.css">
+        <link rel="stylesheet" href="./style/style.css">
         <title>LRS Service API</title>
     </head>
     <body>
@@ -116,75 +116,8 @@
         <!-- ArcGIS JS 4 CDN -->
         <script src="https://js.arcgis.com/4.15/"></script>
         <!-- LRS API (This will be hosted on a CDN as the 'Service')-->
-        <script src="./lrs_api.js"></script>
-        <script>
-            $(document).ready(function() {
-                // Only enable tooltips if user not on mobile
-                function isTouchDevice() {
-                    return true == ("ontouchstart" in window || window.DocumentTouch && document instanceof DocumentTouch);
-                }
-                if (isTouchDevice()===false) {
-                    $('[data-toggle="tooltip"]').tooltip();
-                }
-                // Button controls
-                $('#getLocBtn').click(function() {
-                    if (navigator.geolocation) {
-                        let options = {
-                            enableHighAccuracy: true,
-                            timeout: 5000,
-                            maximumAge: 0
-                        };
-                        function success(position) {
-                            $('#xCoord').val(position.coords.longitude);
-                            $('#yCoord').val(position.coords.latitude);
-                            $('#bufferDist').val(position.coords.accuracy/2);
-                        }
-                        function error(err) {
-                            console.warn(`ERROR(${err.code}): ${err.message}`);
-                        }
-                        navigator.geolocation.getCurrentPosition(success, error, options);
-                    }
-                    else {
-                        alert("Geolocation not supported by this browser");
-                    }
-                    $(this).blur();
-                });
-                $('#runQueryBtn').click(function() {
-                    let theX = $('#xCoord').val();
-                    let theY = $('#yCoord').val();
-                    let theBuffer = $('#bufferDist').val();
-                    $(this).blur();
-                    // Call the API here
-                    let output = lrsAPI.getParams(theX,theY,theBuffer);
-                    $('#outputResponse').val(JSON.stringify(output,null,2));
-                    console.log(lrsAPI);
-
-                });
-                $('#resetBtn').click(function() {
-                    $('#xCoord, #yCoord, #bufferDist, #outputResponse').val('');
-                    $(this).blur();
-                });
-                $('#exportBtn').click(function() {
-                    if (typeof(Storage) !== "undefined") {
-                        let theOutput = $('#outputResponse').val();
-                        sessionStorage.setItem(Date.now(), theOutput);
-                    }
-                    else {
-                        alert("Browser does not support web storage");
-                    }
-                    $(this).blur();
-                });
-                $('#outputToggleBtn').click(function() {
-                    let text = $(this).html();
-                    if (text == "Show Results") {
-                        $(this).html("Hide Results");
-                    }
-                    else {
-                        $(this).html("Show Results");
-                    }
-
-                });
-            });
-        </script>
+        <script src="./scripts/lrs.js"></script>
+        <!-- Script for button controls -->
+        <script src="./scripts/control.js"></script>
     </body>
 </html>

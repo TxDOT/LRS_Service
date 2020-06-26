@@ -65,6 +65,11 @@ require([
                 buffer: buff,
                 accuracy: acc
             };
+            // let point = new Point({
+            //     type: "point",
+            //     latitude: 29.68013,
+            //     longitude: -98.4536
+            // });
             let point = new Point({
                 type: "point",
                 latitude: y,
@@ -86,7 +91,7 @@ require([
 
         // Query nearby routes using reprojected point with buffer
         function identRouteForM(point,buff) {
-            lrs = {};
+            lrsAPI.lrs = {};
             let queryTask, query, padding, gidWithMeasuresGeom, ctrlSectQuery, roadwaysQuery;
             queryTask = new QueryTask();
             query = query = new Query({
@@ -94,7 +99,9 @@ require([
                 returnM: true,
                 outFields: ["*"],
             });
-            padding = buff/2;
+            // need to convert to number and make sure not zero
+            padding = Number(buff)/2;
+            console.log(padding);
             query.geometry= new Extent({
                 "xmin": point.x-padding,
                 "ymin": point.y-padding,
@@ -102,24 +109,27 @@ require([
                 "ymax": point.y+padding,
                 "spatialReference": point.spatialReference
             });
+            console.log(query.geometry);
             queryTask.url = "https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Control_Sections/FeatureServer/0";
             console.log(query.geometry);
             queryTask.execute(query).then(function(results){
-                lrs.mpt = getPointM(point,results);
+                lrsAPI.lrs.mpt = getPointM(point,results);
             });
 
             queryTask.url = "https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Roadways/FeatureServer/0";
             queryTask.execute(query).then(function(results){
                 console.log(query.geometry);
-                lrs.dfo = getPointM(point,results);
+                lrsAPI.lrs.dfo = getPointM(point,results);
             });
-            console.log(lrs);
+
         }
 
         // Callback function from queryTask in identRouteForM
         // Takes results from REST endpoint call and gets measure for point
         function getPointM(point,gidWithM) {
+            console.log(lrsAPI.lrs);
             alert(JSON.stringify(gidWithM.features[0].attributes,null,2));
+
         }
 
         // Gets nearest point on route based on xy ("snaps" to route)
