@@ -94,7 +94,7 @@ require([
             //      return results.features;
             // });
             queryTask.execute(query).then(function(results){
-                 lrsAPI.lrs.mpt = results.features;
+                 lrsAPI.lrs.mpt = results.features[0].attributes;
                  alert(JSON.stringify(lrsAPI.lrs.mpt,null,2));
             });
 
@@ -103,7 +103,7 @@ require([
             //     return results.features;
             // });
             queryTask.execute(query).then(function(results){
-                 lrsAPI.lrs.dfo = results.features;
+                 lrsAPI.lrs.dfo = results.features[0].attributes;
                  alert(JSON.stringify(lrsAPI.lrs.dfo,null,2));
             });
             console.log(lrsAPI.lrs);
