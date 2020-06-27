@@ -76,7 +76,7 @@ require([
         }
 
         // Query nearby routes using reprojected point with buffer
-        function identRouteForM(point,buff) {
+        function identRouteForM(point,buff,domNode) {
             lrsAPI.lrs = {};
             let queryTask, query, padding, ctrlSectQuery, roadwaysQuery;
             queryTask = new QueryTask();
@@ -98,6 +98,7 @@ require([
             queryTask.url = "https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Control_Sections/FeatureServer/0";
             queryTask.execute(query).then(function(results){
                  lrsAPI.lrs.mpt = getPointM(point,results);
+                 dom.byId(domNode).innerHTML += JSON.stringify(lrsAPI.lrs.mpt,null,2);
             });
             // queryTask.execute(query).then(function(results){
             //      lrsAPI.lrs.mpt = results.features[0].attributes;
@@ -107,6 +108,7 @@ require([
             queryTask.url = "https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Roadways/FeatureServer/0";
             queryTask.execute(query).then(function(results){
                 lrsAPI.lrs.dfo = getPointM(point,results);
+                dom.byId(domNode).innerHTML += JSON.stringify(lrsAPI.lrs.dfo,null,2);
             });
             // queryTask.execute(query).then(function(results){
             //      lrsAPI.lrs.dfo = results.features[0].attributes;
@@ -114,6 +116,7 @@ require([
             // });
             console.log(lrsAPI.lrs);
             // return lrsAPI.lrs;
+            // document.getElementById("outputResponse").innerHTML = "Hello There!";
         }
 
         // Callback function from queryTask in identRouteForM
@@ -195,7 +198,7 @@ require([
                 attr.LAT = displayX;
                 attr.LONG = displayY;
                 console.log(attr);
-                alert(JSON.stringify(attr,null,2));
+                // alert(JSON.stringify(attr,null,2));
                 return attr;
             }
             else {
@@ -203,7 +206,7 @@ require([
                 attr.LAT = displayX;
                 attr.LONG = displayY;
                 console.log(attr);
-                alert(JSON.stringify(attr,null,2));
+                // alert(JSON.stringify(attr,null,2));
                 return attr;
             }
         }

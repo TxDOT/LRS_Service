@@ -30,6 +30,7 @@ $(document).ready(function() {
         $(this).blur();
     });
     $('#runQueryBtn').click(function() {
+        // $('#outputResponse').val('');
         let theX = $('#xCoord').val();
         let theY = $('#yCoord').val();
         let theBuffer = $('#bufferDist').val();
@@ -37,9 +38,10 @@ $(document).ready(function() {
         // Call the API here
         let thePt = lrsAPI.getParams(theX,theY,theBuffer);
         // $('#outputResponse').val(JSON.stringify(output,null,2));
-        let routeInfo = lrsAPI.identRouteForM(thePt,theBuffer);
+        let theNode = "outputResponse";
+        let routeInfo = lrsAPI.identRouteForM(thePt,theBuffer,theNode);
         console.log(routeInfo);
-        $('#outputResponse').val(JSON.stringify(thePt,null,2));
+        // $('#outputResponse').val(JSON.stringify(thePt,null,2));
 
     });
     $('#resetBtn').click(function() {
