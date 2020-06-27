@@ -120,6 +120,7 @@ require([
         // Takes results from REST endpoint call and gets measure for point
         function getPointM(point,gidWithM) {
             // let mapPoint = mapPt;
+            var calculatedM = 0;
             let gidWithMeasuresGeom = gidWithM;
             firstIntersectingPoint = findNearestCoordinate(point,gidWithMeasuresGeom);
             var firstIntersectingCoord = geometryEngine.nearestVertex(gidWithMeasuresGeom.features[featurePartIndex].geometry, firstIntersectingPoint);
