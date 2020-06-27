@@ -80,8 +80,8 @@ require([
                 outFields: ["*"],
             });
             // need to convert to number and make sure not zero
-            // padding = Number(buff)/2;
-            padding = 0.5;
+            padding = Number(buff)/2; //use this for mobile calibration
+            // padding = 0.5; //use this for desktop calibration
             query.geometry= new Extent({
                 "xmin": point.x-padding,
                 "ymin": point.y-padding,
