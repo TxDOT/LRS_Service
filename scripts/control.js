@@ -17,7 +17,7 @@ $(document).ready(function() {
             function success(position) {
                 $('#xCoord').val(position.coords.longitude);
                 $('#yCoord').val(position.coords.latitude);
-                $('#bufferDist').val(position.coords.accuracy);
+                $('#bufferDist').val(Math.trunc(position.coords.accuracy));
             }
             function error(err) {
                 console.warn(`ERROR(${err.code}): ${err.message}`);
@@ -38,7 +38,8 @@ $(document).ready(function() {
         let thePt = lrsAPI.getParams(theX,theY,theBuffer);
         // $('#outputResponse').val(JSON.stringify(output,null,2));
         let routeInfo = lrsAPI.identRouteForM(thePt,theBuffer);
-        $('#outputResponse').val(JSON.stringify(routeInfo,null,2));
+        console.log(routeInfo);
+        $('#outputResponse').val(JSON.stringify(thePt,null,2));
 
     });
     $('#resetBtn').click(function() {
