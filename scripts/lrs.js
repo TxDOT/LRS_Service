@@ -56,7 +56,7 @@ require([
         lrsAPI.identRouteForM = identRouteForM;
         lrsAPI.getPointM = getPointM;
         lrsAPI.findNearestCoordinate = findNearestCoordinate;
-        lrsAPI.createTwoPointPolyline = findNearestCoordinate;
+        lrsAPI.createTwoPointPolyline = createTwoPointPolyline;
 
         function getParams(x,y,buff,acc) {
             // get xy, construct webMerc point
@@ -80,7 +80,8 @@ require([
                 outFields: ["*"],
             });
             // need to convert to number and make sure not zero
-            padding = Number(buff)/2;
+            // padding = Number(buff)/2;
+            padding = 0.5;
             query.geometry= new Extent({
                 "xmin": point.x-padding,
                 "ymin": point.y-padding,
@@ -94,6 +95,7 @@ require([
             // });
             queryTask.execute(query).then(function(results){
                  lrsAPI.lrs.mpt = results.features;
+                 alert(JSON.stringify(lrsAPI.lrs.mpt,null,2));
             });
 
             queryTask.url = "https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Roadways/FeatureServer/0";
@@ -102,9 +104,10 @@ require([
             // });
             queryTask.execute(query).then(function(results){
                  lrsAPI.lrs.dfo = results.features;
+                 alert(JSON.stringify(lrsAPI.lrs.dfo,null,2));
             });
             console.log(lrsAPI.lrs);
-            return lrsAPI.lrs;
+            return query;
         }
 
         // Callback function from queryTask in identRouteForM
