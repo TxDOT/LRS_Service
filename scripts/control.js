@@ -30,22 +30,21 @@ $(document).ready(function() {
         $(this).blur();
     });
     $('#runQueryBtn').click(function() {
-        // $('#outputResponse').val('');
+        $('#outputResponse').html(''); //re-setting innerHTML for api to write to
         let theX = $('#xCoord').val();
         let theY = $('#yCoord').val();
         let theBuffer = $('#bufferDist').val();
         $(this).blur();
         // Call the API here
         let thePt = lrsAPI.getParams(theX,theY,theBuffer);
-        // $('#outputResponse').val(JSON.stringify(output,null,2));
         let theNode = "outputResponse";
+        //need to handle delay (use dojo/all)
         let routeInfo = lrsAPI.identRouteForM(thePt,theBuffer,theNode);
-        console.log(routeInfo);
-        // $('#outputResponse').val(JSON.stringify(thePt,null,2));
 
     });
     $('#resetBtn').click(function() {
-        $('#xCoord, #yCoord, #bufferDist, #outputResponse').val('');
+        $('#xCoord, #yCoord, #bufferDist').val('');
+        $('#outputResponse').html(''); //resetting innerHTML for api to write to
         $(this).blur();
     });
     $('#exportBtn').click(function() {
