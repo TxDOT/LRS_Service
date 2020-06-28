@@ -18,6 +18,8 @@ $(document).ready(function() {
                 $('#xCoord').val(position.coords.longitude);
                 $('#yCoord').val(position.coords.latitude);
                 $('#bufferDist').val(Math.trunc(position.coords.accuracy));
+                $('#lrsType').val(1);
+
             }
             function error(err) {
                 console.warn(`ERROR(${err.code}): ${err.message}`);
@@ -34,16 +36,18 @@ $(document).ready(function() {
         let theX = $('#xCoord').val();
         let theY = $('#yCoord').val();
         let theBuffer = $('#bufferDist').val();
-        $(this).blur();
-        // Call the API here
-        let thePt = lrsAPI.getParams(theX,theY,theBuffer);
+        let theLRM = $('#lrsType').val();
         let theNode = "outputResponse";
-        //need to handle delay (use dojo/all)
-        let routeInfo = lrsAPI.identRouteForM(thePt,theBuffer,theNode);
+        $(this).blur();
+        // CALLING THE API HERE //
+        // get params and construct point with appropriate SR
+        let thePt = lrsAPI.getParams(theX,theY);
+        // take point, buffer, lrs type, and output location (dom node) and calculate Ms
+        let routeInfo = lrsAPI.identRouteForM(thePt,theBuffer,theLRM,theNode);
 
     });
     $('#resetBtn').click(function() {
-        $('#xCoord, #yCoord, #bufferDist').val('');
+        $('#xCoord, #yCoord, #bufferDist, #lrsType').val('');
         $('#outputResponse').html(''); //resetting innerHTML for api to write to
         $(this).blur();
     });

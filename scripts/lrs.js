@@ -55,7 +55,7 @@ require([
         // Attaching functions to global API object so they are accessible outside their scope
         lrsAPI.getParams = getParams;
         lrsAPI.identRouteForM = identRouteForM;
-        lrsAPI.getSegmentWithDFO = getSegmentWithDFO;
+        lrsAPI.getSegmentWithM = getSegmentWithM;
         lrsAPI.getPointM = getPointM;
         lrsAPI.findNearestCoordinate = findNearestCoordinate;
         lrsAPI.createTwoPointPolyline = createTwoPointPolyline;
@@ -78,7 +78,7 @@ require([
         }
 
         // Query nearby routes using reprojected point with buffer
-        function identRouteForM(point,buff,domNode) {
+        function identRouteForM(point,buff,lrm,domNode) {
             lrsAPI.lrs = {};
             let queryTask, query, padding, ctrlSectQuery, roadwaysQuery;
             queryTask = new QueryTask();
@@ -97,65 +97,71 @@ require([
                 "ymax": point.y+padding,
                 "spatialReference": point.spatialReference
             });
-            // INCLUDE CSMPT WHEN BOTH GIDS MATCH (ERRORS NOW)
-            // queryTask.url = "https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Control_Sections/FeatureServer/0";
-            // queryTask.execute(query).then(function(results){
-            //      lrsAPI.lrs.mpt = getPointM(point,results);
-            //      dom.byId(domNode).innerHTML += JSON.stringify(lrsAPI.lrs.mpt,null,2);
-            // });
-            // queryTask.execute(query).then(function(results){
-            //      lrsAPI.lrs.mpt = results.features[0].attributes;
-            //      // alert(JSON.stringify(lrsAPI.lrs.mpt,null,2)); //use for mobile calibration
-            // });
 
-            queryTask.url = "https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Roadways/FeatureServer/0";
-            queryTask.execute(query).then(function(results){
-                getSegmentWithDFO(point,results,domNode);
-            });
-            // queryTask.execute(query).then(function(results){
-            //      lrsAPI.lrs.dfo = results.features[0].attributes;
-            //      // alert(JSON.stringify(lrsAPI.lrs.dfo,null,2)); //use for mobile calibration
-            // });
-            // console.log(lrsAPI.lrs);
-            // return lrsAPI.lrs;
-            // document.getElementById("outputResponse").innerHTML = "Hello There!";
+            if (lrm == 1) {
+                queryTask.url = "https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Roadways/FeatureServer/0";
+                queryTask.execute(query).then(function(results){ //need to add errorback here
+                    getSegmentWithM(point,results,lrm,domNode);
+                });
+            }
+            else if (lrm == 2) {
+                queryTask.url = "https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Control_Sections/FeatureServer/0";
+                queryTask.execute(query).then(function(results){ //need to add errorback here
+                    getSegmentWithM(point,results,lrm,domNode);
+                });
+            }
+            else {
+                alert("Choose a LRS type to output (DFO: 1, CSMPT: 2).\nMarker Offset and 'Return All' coming soon!");
+            }
         }
 
-        function getSegmentWithDFO(point,results,domNode) {
+        function getSegmentWithM(point,results,lrm,domNode) {
             console.log(gidWithMeasuresGeom);
+            console.log(lrm);
+
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function() {
                 if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-
-                    // else {
+                    // Handle hot IE garbage
+                    if (isIE()) {
+                        gidWithMeasuresGeom = JSON.parse(xmlhttp.response);
+                    }
+                    else {
                         gidWithMeasuresGeom = xmlhttp.response;
-                    // }
-                    lrsAPI.lrs.dfo = getPointM(point,results);
-                    dom.byId(domNode).innerHTML += JSON.stringify(lrsAPI.lrs.dfo,null,2);
+                    }
+                    lrsAPI.lrs = getPointM(point,lrm,results);
+                    dom.byId(domNode).innerHTML += JSON.stringify(lrsAPI.lrs,null,2);
                 }
             };
-
-            let serviceString = "https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Roadways/FeatureServer/0";
-            let paraString = "/query?f=json&where=GID=" + results.features[0].attributes.GID + "&returnGeometry=true&returnM=true&outSR=102100";
-            let queryString = serviceString + paraString;
-            xmlhttp.open("GET", queryString, true);
-            xmlhttp.responseType = 'json';
-            xmlhttp.send();
+            if (lrm == 1) {
+                let serviceString = "https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Roadways/FeatureServer/0";
+                let paraString = "/query?f=json&where=GID=" + results.features[0].attributes.GID + "&returnGeometry=true&returnM=true&outSR=102100";
+                let queryString = serviceString + paraString;
+                xmlhttp.open("GET", queryString, true);
+                xmlhttp.responseType = 'json';
+                xmlhttp.send();
+            }
+            if (lrm == 2) {
+                let serviceString = "https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Control_Sections/FeatureServer/0";
+                let paraString = "/query?f=json&where=GID=" + results.features[0].attributes.GID + " AND CTRL_SECT_NBR='" + results.features[0].attributes.CTRL_SECT_NBR + "'&returnGeometry=true&returnM=true&outSR=102100";
+                let queryString = serviceString + paraString;
+                xmlhttp.open("GET", queryString, true);
+                xmlhttp.responseType = 'json';
+                xmlhttp.send();
+            }
         }
 
         // Callback function from queryTask in identRouteForM
         // Takes results from REST endpoint call and gets measure for point
-        function getPointM(point,results) {
-            // let mapPoint = mapPt;
+        function getPointM(point,lrm,results) {
             let attrs = results.features[0].attributes;
             let calculatedM = 0;
-            // gidWithMeasuresGeom = gidWithM;
-            console.log(gidWithMeasuresGeom); //problem is with global let scope/namespace pollution -mw
             let firstIntersectingPoint = findNearestCoordinate(point);
             let firstIntersectingCoord = geometryEngine.nearestVertex(gidWithMeasuresGeom.features[featurePartIndex].geometry, firstIntersectingPoint);
             let vertexIndex = firstIntersectingCoord.vertexIndex;
             let maxVertex = gidWithMeasuresGeom.features[featurePartIndex].geometry.paths[0].length-1;
 
+            // Handle beginning of route
             if (vertexIndex == 0) {
                 let coord2 = gidWithMeasuresGeom.features[featurePartIndex].geometry.paths[0][vertexIndex];
                 let thePoint2 = new Point([coord2[0],coord2[1]], new SpatialReference({wkid: 3857 }));
@@ -165,6 +171,7 @@ require([
                 calculatedM = point2M + geoMileValue;
             }
 
+            // Handle end of route
             if (vertexIndex == maxVertex) {
                 let coord2 = gidWithMeasuresGeom.features[featurePartIndex].geometry.paths[0][vertexIndex];
                 let thePoint2 = new Point([coord2[0],coord2[1]], new SpatialReference({wkid: 3857 }));
@@ -174,6 +181,7 @@ require([
                 calculatedM = point2M - geoMileValue;
             }
 
+            // Handle everything in the middle of route
             if (vertexIndex > 0 && vertexIndex < maxVertex) {
                 let coord1 = gidWithMeasuresGeom.features[featurePartIndex].geometry.paths[0][vertexIndex-1];
                 let coord2 = gidWithMeasuresGeom.features[featurePartIndex].geometry.paths[0][vertexIndex];
@@ -213,34 +221,27 @@ require([
                     }
                 }
             }
-            console.log(gidWithMeasuresGeom);
             let displayM = Math.round(calculatedM*10000)/10000;
             let displayX = Math.round(firstIntersectingPoint.latitude*100000)/100000;
             let displayY = Math.round(firstIntersectingPoint.longitude*100000)/100000;
-            // let attr = gidWithMeasuresGeom.features[0].attributes;
 
-
-            // if(attr.ASSET_NM){
-            //     attr.CALC_MPT = displayM;
-            //     attr.LAT = displayX;
-            //     attr.LONG = displayY;
-            //     console.log(attr);
-            //     // alert(JSON.stringify(attr,null,2));
-            //     return attr;
-            // }
-            // else {
+            // conditionally set attribute values based on lrs type
+            if (lrm == 1) {
                 attrs.CALC_DFO = displayM;
-                attrs.LAT = displayX;
-                attrs.LONG = displayY;
-                console.log(attrs);
-                // alert(JSON.stringify(attr,null,2));
-                return attrs;
-            // }
+            }
+            else {
+                attrs.CALC_MPT = displayM;
+            }
+
+            attrs.LAT = displayX;
+            attrs.LONG = displayY;
+            console.log(attrs);
+            return attrs;
+
         }
 
         // Gets nearest point on route based on xy ("snaps" to route)
         function findNearestCoordinate(point) {
-            // let gidWithMeasuresGeom = gidWithM;
             let shortestDistance = 20000;
             let firstIntersectingPoint;
             let firstIntersectingPointTemp;
