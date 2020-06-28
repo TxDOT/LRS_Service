@@ -194,22 +194,22 @@ require([
             let displayY = Math.round(firstIntersectingPoint.longitude*100000)/100000;
             let attr = gidWithMeasuresGeom.features[0].attributes;
 
-            if(attr.ASSET_NM){
-                attr.CALC_MPT = displayM;
-                attr.LAT = displayX;
-                attr.LONG = displayY;
-                console.log(attr);
-                // alert(JSON.stringify(attr,null,2));
-                return attr;
-            }
-            else {
+            // if(attr.ASSET_NM){
+            //     attr.CALC_MPT = displayM;
+            //     attr.LAT = displayX;
+            //     attr.LONG = displayY;
+            //     console.log(attr);
+            //     // alert(JSON.stringify(attr,null,2));
+            //     return attr;
+            // }
+            // else {
                 attr.CALC_DFO = displayM;
                 attr.LAT = displayX;
                 attr.LONG = displayY;
                 console.log(attr);
                 // alert(JSON.stringify(attr,null,2));
                 return attr;
-            }
+            // }
         }
 
         // Gets nearest point on route based on xy ("snaps" to route)
