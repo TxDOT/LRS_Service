@@ -95,11 +95,12 @@ require([
                 "ymax": point.y+padding,
                 "spatialReference": point.spatialReference
             });
-            queryTask.url = "https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Control_Sections/FeatureServer/0";
-            queryTask.execute(query).then(function(results){
-                 lrsAPI.lrs.mpt = getPointM(point,results);
-                 dom.byId(domNode).innerHTML += JSON.stringify(lrsAPI.lrs.mpt,null,2);
-            });
+            // INCLUDE CSMPT WHEN BOTH GIDS MATCH (ERRORS NOW)
+            // queryTask.url = "https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Control_Sections/FeatureServer/0";
+            // queryTask.execute(query).then(function(results){
+            //      lrsAPI.lrs.mpt = getPointM(point,results);
+            //      dom.byId(domNode).innerHTML += JSON.stringify(lrsAPI.lrs.mpt,null,2);
+            // });
             // queryTask.execute(query).then(function(results){
             //      lrsAPI.lrs.mpt = results.features[0].attributes;
             //      // alert(JSON.stringify(lrsAPI.lrs.mpt,null,2)); //use for mobile calibration
