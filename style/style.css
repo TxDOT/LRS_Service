@@ -1,19 +1,21 @@
 /* CENTER INPUT AND OUTPUT DIVS */
 
-#cover {
-    background-color: #143c5c;
-    background-size: cover;
-    height: 100%;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    position: relative;
-}
-
 #cover-caption {
+    background-color: #143c5c;
     width: 100%;
     position: relative;
     z-index: 1;
+}
+
+/* CLICKABLE ICONS WITHOUT BUTTONS  */
+
+.fa-info-circle {
+    cursor: pointer;
+}
+
+.fa-info-circle:hover {
+    cursor: pointer;
+    color: #cc7b29;
 }
 
 /* CUSTOMIZE PLACEHOLDER TEXT */
@@ -44,11 +46,13 @@
     background-color: rgba(204, 123, 41, 0.85) !important;
 }
 
-.btn-warning.focus, .btn-warning:focus {
-    box-shadow: none;
-}
-
 .btn-warning:not(:disabled):not(.disabled):active {
     color: white;
     box-shadow: none;
+}
+
+/* CUSTOMIZE BUTTON WIDTH */
+
+.custom-wd {
+    width: 70px !important;
 }
