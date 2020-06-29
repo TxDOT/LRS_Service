@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>LRS URL Params</title>
+    <!-- ArcGIS JS 4 CDN -->
+    <script src="https://js.arcgis.com/4.15/"></script>
+    <!-- TPP Framework -->
+    <!-- <script src="https://cdn.jsdelivr.net/gh/TxDOT/Framework/framework_1.0.js"></script> -->
+    <script>
+        function resolveURLSimple() {
+            var docURL = document.URL;
+            var theURLlen = docURL.length;
+            var typeBegin = docURL.indexOf("?");
+            var typeEnd = docURL.indexOf("=");
+            if (typeBegin<1) {
+                console.log("No parameters found in the URL.");
+                return;
+            }
+            else {
+                var urlField = docURL.substring(typeBegin+1,typeEnd);
+                var urlValue = docURL.substring(typeEnd+1,theURLlen).split(",");
+
+                for (var i = 0; i < urlValue.length; i++) {
+                    urlValue[i] = urlValue[i].replace("_", " ");
+                }
+
+                // for (var i = 0; i < urlValue.length; i++) {
+                //     urlValue[i] = "'" + urlValue[i] + "'";
+                // }
+
+                console.log(urlField,urlValue);
+                return urlField, urlValue;
+            }
+        }
+    </script>
+    <!-- LRS API CDN -->
+    <script src="https://cdn.jsdelivr.net/gh/TxDOT/LRS_Service/scripts/lrs.js"></script>
+    <script>
+        const load = () => {
+            const urlParams = resolveURLSimple();
+            const point = lrsAPI.getParams(Number(urlParams[0]),Number(urlParams[1]));
+            console.log(point);
+            const lrsParams = lrsAPI.identRouteForM(point,urlParams[2],urlParams[3],"output");
+          }
+          window.onload = load;
+    </script>
+</head>
+<body id="output"></body>
+</html>
