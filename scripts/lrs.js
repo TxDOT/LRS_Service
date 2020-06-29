@@ -1,14 +1,10 @@
-// GLOBAL FUNCTIONS
+// GLOBALS
+
 let lrsAPI = {
-    // featurePartIndex:"",
-    // firstIntersectingPoint:"",
     lrs: {}
 };
-// GLOBAL letIABLES
 let featurePartIndex;
 let gidWithMeasuresGeom;
-// let firstIntersectingPoint;
-// let lrs={};
 
 //Check if using IE and get version
 function isIE() {
@@ -18,6 +14,7 @@ function isIE() {
 
 // ESRI JS API MODULES
 require([
+
     // esri config, core, and tasks
     "esri/config",
     "esri/tasks/support/Query",
@@ -51,7 +48,7 @@ require([
         on,
         parser)
     {
-        // DEFINE ALL FUNCTIONS FIRST
+
         // Attaching functions to global API object so they are accessible outside their scope
         lrsAPI.getParams = getParams;
         lrsAPI.identRouteForM = identRouteForM;
@@ -60,24 +57,19 @@ require([
         lrsAPI.findNearestCoordinate = findNearestCoordinate;
         lrsAPI.createTwoPointPolyline = createTwoPointPolyline;
 
-        function getParams(x,y,buff,acc) {
-            // get xy, construct webMerc point
+        // get xy, construct webMerc point
+        function getParams(x,y) {
+
             let point = new Point({ //mobile calibration
                 type: "point",
                 latitude: y,
                 longitude: x,
                 spatialReference: new SpatialReference({wkid: 102100})
             });
-            // let point = new Point({ //desktop calibration
-            //     type: "point",
-            //     latitude: 30.50746964416424,
-            //     longitude: -97.74142815453732,
-            //     spatialReference: new SpatialReference({wkid: 102100})
-            // });
             return point;
         }
 
-        // Query nearby routes using reprojected point with buffer
+        // Query nearby routes using webMerc point with buffer
         function identRouteForM(point,buff,lrm,domNode) {
             lrsAPI.lrs = {};
             let queryTask, query, padding, ctrlSectQuery, roadwaysQuery;
@@ -87,9 +79,7 @@ require([
                 returnM: true,
                 outFields: ["*"],
             });
-            // need to convert to number and make sure not zero
-            padding = Number(buff); //use this for mobile calibration
-            // padding = 10; //use this for desktop calibration
+            padding = Number(buff);
             query.geometry= new Extent({
                 "xmin": point.x-padding,
                 "ymin": point.y-padding,
@@ -98,6 +88,7 @@ require([
                 "spatialReference": point.spatialReference
             });
 
+            // Check which LRS type to return
             if (lrm == 1) {
                 queryTask.url = "https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Roadways/FeatureServer/0";
                 queryTask.execute(query).then(function(results){ //need to add errorback here
@@ -116,8 +107,6 @@ require([
         }
 
         function getSegmentWithM(point,results,lrm,domNode) {
-            console.log(gidWithMeasuresGeom);
-            console.log(lrm);
 
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function() {
@@ -153,6 +142,7 @@ require([
 
         // Callback function from queryTask in identRouteForM
         // Takes results from REST endpoint call and gets measure for point
+        // Consolidate this
         function getPointM(point,lrm,results) {
             let attrs = results.features[0].attributes;
             let calculatedM = 0;
