@@ -119,7 +119,7 @@ require([
                         gidWithMeasuresGeom = xmlhttp.response;
                     }
                     lrsAPI.lrs = getPointM(point,lrm,results);
-                    dom.byId(domNode).innerHTML += JSON.stringify(lrsAPI.lrs,null,2);
+                    dom.byId(domNode).innerHTML = JSON.stringify(lrsAPI.lrs,null,2);
                 }
             };
             if (lrm == 1) {
