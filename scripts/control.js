@@ -44,6 +44,12 @@ $(document).ready(function() {
         let thePt = lrsAPI.getParams(theX,theY);
         // take point, buffer, lrs type, and output location (dom node) and calculate Ms
         let routeInfo = lrsAPI.identRouteForM(thePt,theBuffer,theLRM,theNode);
+        // OPTION 2 
+        // PASS AROUND THE RESOLVED PROMISE AND USE ITS THEN METHOD TO ACCESS THE VALUE!!!!!
+        // let routeInfo = lrsAPI.identRouteForM(thePt,theBuffer,theLRM,theNode)
+        // .then(function(route){
+        //     console.log(route);
+        // });
 
     });
     $('#resetBtn').click(function() {
