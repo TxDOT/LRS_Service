@@ -33,7 +33,7 @@
         const load = () => {
             const urlParams = parseURL(document.URL);
             console.log(urlParams);
-            const point = lrsAPI.getParams(Number(urlParams.urlObj.x),Number(urlParams.urlObj.y));
+            const point = lrsAPI.getParams(Number(urlParams.urlObj.y),Number(urlParams.urlObj.x));
             console.log(point);
             const lrsParams = lrsAPI.identRouteForM(point,urlParams.urlObj.buff,urlParams.urlObj.lrm,"output");
           }
