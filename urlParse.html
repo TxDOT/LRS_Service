@@ -10,36 +10,32 @@
     <!-- TPP Framework -->
     <!-- <script src="https://cdn.jsdelivr.net/gh/TxDOT/Framework/framework_1.0.js"></script> -->
     <script>
-        function resolveURLSimple() {
-            var docURL = document.URL;
-            var theURLlen = docURL.length;
-            var typeBegin = docURL.indexOf("?");
-            var typeEnd = docURL.indexOf("=");
-            if (typeBegin<1) {
-                console.log("No parameters found in the URL.");
-                return;
+        function parseURL(url) {
+            let parser = document.createElement('a'),
+                urlObj = {},
+                queries, split, i, xy;
+            parser.href = url;
+            queries = parser.search.replace(/^\?/, '').split('&');
+            for( i = 0; i < queries.length; i++ ) {
+                let split = queries[i].split('=');
+                urlObj[split[0]] = split[1];
             }
-            else {
-                var urlField = docURL.substring(typeBegin+1,typeEnd);
-                var urlValue = docURL.substring(typeEnd+1,theURLlen).split(",");
-
-                for (var i = 0; i < urlValue.length; i++) {
-                    urlValue[i] = urlValue[i].replace("_", " ");
-                }
-
-                console.log(urlField,urlValue);
-                return urlField, urlValue;
-            }
+            split = urlObj.coords.split(',');
+            urlObj.x = split[0];
+            urlObj.y = split[1];
+            delete urlObj['coords'];
+            return {urlObj: urlObj};
         }
     </script>
     <!-- LRS API CDN -->
     <script src="https://cdn.jsdelivr.net/gh/TxDOT/LRS_Service/scripts/lrs.js"></script>
     <script>
         const load = () => {
-            const urlParams = resolveURLSimple();
-            const point = lrsAPI.getParams(Number(urlParams[0]),Number(urlParams[1]));
+            const urlParams = parseURL(document.URL);
+            console.log(urlParams);
+            const point = lrsAPI.getParams(Number(urlParams.urlObj.x),Number(urlParams.urlObj.y));
             console.log(point);
-            const lrsParams = lrsAPI.identRouteForM(point,urlParams[2],urlParams[3],"output");
+            const lrsParams = lrsAPI.identRouteForM(point,urlParams.urlObj.buff,urlParams.urlObj.lrm,"output");
           }
           window.onload = load;
     </script>
