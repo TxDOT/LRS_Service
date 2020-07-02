@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>LRS URL Params</title>
+    <!-- ArcGIS JS 4 CDN -->
+    <script src="https://js.arcgis.com/4.15/"></script>
+    <!-- TPP Framework -->
+    <!-- <script src="https://cdn.jsdelivr.net/gh/TxDOT/Framework/framework_1.0.js"></script> -->
+    <script>
+        function parseURL(url) {
+            let paramsObj = {};
+            let params = (new URL(document.location)).searchParams;
+            let split = params.get('coords').split(',');
+            paramsObj.x = Number(split[1].replace(/\s/g,''));
+            paramsObj.y = Number(split[0].replace(/\s/g,''));
+            paramsObj.buff = Number(params.get('buff'));
+            paramsObj.lrm = Number(params.get('lrm'));
+            console.log(paramsObj);
+            return paramsObj;
+        }
+    </script>
+    <!-- LRS API CDN -->
+    <script src="https://cdn.jsdelivr.net/gh/TxDOT/LRS_Service/scripts/lrs.js"></script>
+    <script>
+        const load = () => {
+            const urlParams = parseURL();
+            const point = lrsAPI.getParams(urlParams.x, urlParams.y);
+            const rteInfoM = lrsAPI.identRouteForM(point, urlParams.buff, urlParams.lrm, "output");
+        }
+        window.onload = load;
+    </script>
+</head>
+<body id="output" style="background-color: #2d2d2d; color: #a682e8; white-space: pre-wrap; font-family: monospace; font-size: 2em;"></body>
+</html>

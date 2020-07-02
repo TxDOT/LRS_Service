@@ -91,9 +91,15 @@ require([
             // Check which LRS type to return
             if (lrm == 1) {
                 queryTask.url = "https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Roadways/FeatureServer/0";
-                queryTask.execute(query).then(function(results){ //need to add errorback here
+                queryTask.execute(query).then(function(results){
                     getSegmentWithM(point,results,lrm,domNode);
                 });
+                // OPTION 2
+                // THIS IS RETURNING A RESOLVED PROMISE TO THE CALLING FUNCTION
+                // WHICH CAN BE ACCESSED USING .THEN() METHOD IN CLIENT APP
+                // return queryTask.execute(query).then(function(results){
+                //     return results;
+                // });
             }
             else if (lrm == 2) {
                 queryTask.url = "https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_Control_Sections/FeatureServer/0";
@@ -119,7 +125,7 @@ require([
                         gidWithMeasuresGeom = xmlhttp.response;
                     }
                     lrsAPI.lrs = getPointM(point,lrm,results);
-                    dom.byId(domNode).innerHTML += JSON.stringify(lrsAPI.lrs,null,2);
+                    dom.byId(domNode).innerHTML = JSON.stringify(lrsAPI.lrs,null,2);
                 }
             };
             if (lrm == 1) {
