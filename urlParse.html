@@ -11,34 +11,27 @@
     <!-- <script src="https://cdn.jsdelivr.net/gh/TxDOT/Framework/framework_1.0.js"></script> -->
     <script>
         function parseURL(url) {
-            let parser = document.createElement('a'),
-                urlObj = {},
-                queries, split, i, xy;
-            parser.href = url;
-            queries = parser.search.replace(/^\?/, '').split('&');
-            for( i = 0; i < queries.length; i++ ) {
-                let split = queries[i].split('=');
-                urlObj[split[0]] = split[1];
-            }
-            split = urlObj.coords.split(',');
-            urlObj.x = split[0];
-            urlObj.y = split[1];
-            delete urlObj['coords'];
-            return {urlObj: urlObj};
+            let paramsObj = {};
+            let params = (new URL(document.location)).searchParams;
+            let split = params.get('coords').split(',');
+            paramsObj.x = Number(split[1].replace(/\s/g,''));
+            paramsObj.y = Number(split[0].replace(/\s/g,''));
+            paramsObj.buff = Number(params.get('buff'));
+            paramsObj.lrm = Number(params.get('lrm'));
+            console.log(paramsObj);
+            return paramsObj;
         }
     </script>
     <!-- LRS API CDN -->
     <script src="https://cdn.jsdelivr.net/gh/TxDOT/LRS_Service/scripts/lrs.js"></script>
     <script>
         const load = () => {
-            const urlParams = parseURL(document.URL);
-            console.log(urlParams);
-            const point = lrsAPI.getParams(Number(urlParams.urlObj.y),Number(urlParams.urlObj.x));
-            console.log(point);
-            const lrsParams = lrsAPI.identRouteForM(point,urlParams.urlObj.buff,urlParams.urlObj.lrm,"output");
-          }
-          window.onload = load;
+            const urlParams = parseURL();
+            const point = lrsAPI.getParams(urlParams.x, urlParams.y);
+            const rteInfoM = lrsAPI.identRouteForM(point, urlParams.buff, urlParams.lrm, "output");
+        }
+        window.onload = load;
     </script>
 </head>
-<body id="output" style="white-space: pre-wrap; font-family: monospace; font-size: 2em;"></body>
+<body id="output" style="background-color: #2d2d2d; color: #a682e8; white-space: pre-wrap; font-family: monospace; font-size: 2em;"></body>
 </html>
